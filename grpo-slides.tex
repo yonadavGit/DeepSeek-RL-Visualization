@@ -440,27 +440,31 @@ $= \dfrac{\pi_\theta(a_t|s_t)}{\pi_{\text{old}}(a_t|s_t)}\cdot\nabla_\theta\log\
 \begin{frame}
 \eyebrow{Baselines \& PPO \textperiodcentered\ 18}{\S7.3}
 \frametag{inkdim}{Building block 5}
+\vspace{-6pt}
 \headline{What the clip actually does}
-{\small\color{ink}Two versions of the same term get computed --- the true one, and one where the ratio is capped to the trust region. $\min$ always keeps whichever is \textit{smaller}:}
-\par\vspace{3pt}
-\begin{eqbox}[fontupper=\small,top=4pt,bottom=4pt]
+\vspace{-8pt}
+{\footnotesize\color{ink}\textbf{The goal:} reward the policy for improving, without trusting that reward once the comparison to the old policy stops being meaningful. Mechanically: two versions of the term get computed --- true, and ratio capped to the trust region --- and $\min$ keeps whichever is \textit{smaller}. Both signs of $A_t$ below use the same band $[0.8,1.2]$:}
+\par\vspace{1pt}
+\begin{eqbox}[fontupper=\small,top=2pt,bottom=2pt]
 $L_t = \min\Big(\underbrace{\text{ratio}_t(\theta)\,A_t}_{\text{true value}},\ \ \underbrace{\text{clip}(\text{ratio}_t(\theta),1{-}\varepsilon,1{+}\varepsilon)\,A_t}_{\text{value if ratio is capped to the trust region}}\Big)$
 \end{eqbox}
-\par\vspace{4pt}
+\par\vspace{1pt}
 \footnotesize
-\renewcommand{\arraystretch}{1.05}
-\begin{tabular}{@{} l l l l l @{}}
+\renewcommand{\arraystretch}{0.9}
+\begin{tabular}{@{} l c c c c l @{}}
 \toprule
-\textbf{Scenario ($A{=}{+}1$, band $[0.8,1.2]$)} & \textbf{ratio} & \textbf{true} & \textbf{capped} & \textbf{min picks} \\
+\textbf{Scenario} & \textbf{$A_t$} & \textbf{ratio} & \textbf{true} & \textbf{capped} & \textbf{min picks} \\
 \midrule
-Pushed further, past the margin & 1.5 & 1.5 & 1.2 & \color{accent}capped --- flat \\
-Drifted the wrong way & 0.7 & 0.7 & 0.8 & \color{neg}true --- uncapped \\
+Good action, pushed further & $+1$ & 1.5 & 1.5 & 1.2 & \color{accent}capped --- flat \\
+Good action, wrong direction & $+1$ & 0.7 & 0.7 & 0.8 & \color{neg}true --- uncapped \\
+Bad action, suppressed further & $-1$ & 0.5 & $-0.5$ & $-0.8$ & \color{accent}capped --- flat \\
+Bad action, wrong direction & $-1$ & 1.5 & $-1.5$ & $-1.2$ & \color{neg}true --- uncapped \\
 \bottomrule
 \end{tabular}
-\par\vspace{3pt}
-\begin{callout}
+\par\vspace{1pt}
+\begin{callout}[top=2pt,bottom=2pt]
 \clabel{accentB}{The one-line version}
-{\small\color{ink}Clipping caps the reward for overshooting a good move. It never caps the penalty for a bad one.}
+{\footnotesize\color{ink}Clipping caps the reward for overshooting a good move. It never caps the penalty for a bad one.}
 \end{callout}
 \end{frame}
 
