@@ -4,6 +4,7 @@
 \usepackage{mathpazo}
 \usepackage{geometry}
 \geometry{paperwidth=19.2cm,paperheight=10.8cm}
+\usepackage{graphicx}
 \usepackage{sourcesanspro}
 \usepackage{inconsolata}
 \usepackage{tikz}
@@ -130,9 +131,16 @@
 
 \begin{document}
 
-% ================= 01 : TITLE =================
+% ================= 01 : COVER MEME =================
+\begin{frame}[c]
+\begin{center}
+\includegraphics[height=8.6cm]{cover-meme.png}
+\end{center}
+\end{frame}
+
+% ================= 02 : TITLE =================
 \begin{frame}
-\eyebrow{Framing \textperiodcentered\ 01}{}
+\eyebrow{Framing \textperiodcentered\ 02}{}
 \vspace{8pt}
 {\usefont{T1}{ppl}{b}{n}\selectfont\Huge\color{ink} From MDPs to \textcolor{accent}{\textit{GRPO}}}\par
 \vspace{18pt}
@@ -145,7 +153,7 @@
 
 % ================= 02 : THE CHAIN =================
 \begin{frame}
-\eyebrow{Framing \textperiodcentered\ 02}{}
+\eyebrow{Framing \textperiodcentered\ 03}{}
 \headline{One idea leads to the next}
 \small
 \renewcommand{\arraystretch}{1.05}
@@ -164,7 +172,7 @@
 
 % ================= 03 : CLASSICAL MDP DEFS =================
 \begin{frame}
-\eyebrow{Classical MDP \textperiodcentered\ 03}{background}
+\eyebrow{Classical MDP \textperiodcentered\ 04}{background}
 \headline{The vocabulary reinforcement learning starts with}
 \lede{A \textbf{Markov Decision Process (MDP)} is the tuple $(S,A,P,R,\gamma)$. Everything else in this deck is a choice about how to fill in these six ideas.}
 \vspace{6pt}
@@ -184,7 +192,7 @@
 
 % ================= 04 : MDP AS A GRAPH =================
 \begin{frame}
-\eyebrow{Classical MDP \textperiodcentered\ 04}{background}
+\eyebrow{Classical MDP \textperiodcentered\ 05}{background}
 \headline{What that tuple actually looks like}
 \begin{center}
 \scalebox{0.82}{
@@ -210,7 +218,7 @@
 
 % ================= 05 : VALUE FUNCTIONS =================
 \begin{frame}
-\eyebrow{Classical MDP \textperiodcentered\ 05}{background}
+\eyebrow{Classical MDP \textperiodcentered\ 06}{background}
 \headline{The classical move: estimate value, then improve}
 \begin{eqbox}[fontupper=\normalsize]
 $V^\pi(s) = \mathbb{E}_\pi\big[\sum_{k=0}^{\infty}\gamma^k r_{t+k} \mid s_t=s\big]$ \\[6pt]
@@ -227,7 +235,7 @@ $Q^\pi(s,a) = \mathbb{E}_\pi\big[\sum_{k=0}^{\infty}\gamma^k r_{t+k} \mid s_t=s,
 
 % ================= 06 : MAPPING TO LLM =================
 \begin{frame}
-\eyebrow{LLM as MDP \textperiodcentered\ 06}{\S7.1}
+\eyebrow{LLM as MDP \textperiodcentered\ 07}{\S7.1}
 \headline{Same tuple, new content}
 \lede{Token generation is still an ordinary episodic MDP. Only what fills each slot changes.}
 \begin{tabular}{@{} l p{13cm} @{}}
@@ -247,7 +255,7 @@ $Q^\pi(s,a) = \mathbb{E}_\pi\big[\sum_{k=0}^{\infty}\gamma^k r_{t+k} \mid s_t=s,
 
 % ================= 07 : PROBLEM -- SPARSE REWARD =================
 \begin{frame}
-\eyebrow{LLM as MDP \textperiodcentered\ 07}{\S7.1.3}
+\eyebrow{LLM as MDP \textperiodcentered\ 08}{\S7.1.3}
 \frametag{neg}{Problem}
 \headline{Reward only shows up at the very end}
 \begin{eqbox}
@@ -266,7 +274,7 @@ $r_1 = r_2 = \cdots = r_{T-1} = 0, \quad r_T = R(\tau)$
 
 % ================= 08 : LLM AS A TREE =================
 \begin{frame}
-\eyebrow{LLM as MDP \textperiodcentered\ 08}{}
+\eyebrow{LLM as MDP \textperiodcentered\ 09}{}
 \headline{The same picture, redrawn for a language model}
 \begin{center}
 \scalebox{1.05}{
@@ -298,7 +306,7 @@ $r_1 = r_2 = \cdots = r_{T-1} = 0, \quad r_T = R(\tau)$
 
 % ================= 09 : BLOCK 1 -- J(THETA) =================
 \begin{frame}
-\eyebrow{Building Blocks \textperiodcentered\ 09}{\S7.2}
+\eyebrow{Building Blocks \textperiodcentered\ 10}{\S7.2}
 \frametag{inkdim}{Building block}
 \headline{What are we even trying to maximize?}
 \begin{eqbox}[fontupper=\normalsize]
@@ -315,7 +323,7 @@ $J(\theta) = \mathbb{E}_{x\sim D}\,\mathbb{E}_{y\sim\pi_\theta(\cdot|x)}\big[R(x
 
 % ================= 10 : BLOCK 2 -- MONTE CARLO =================
 \begin{frame}
-\eyebrow{Building Blocks \textperiodcentered\ 10}{\S7.2}
+\eyebrow{Building Blocks \textperiodcentered\ 11}{\S7.2}
 \frametag{inkdim}{Building block}
 \headline{Estimating its gradient from sampled rollouts}
 {\normalsize\color{ink}We can't compute $J(\theta)$ exactly --- the space of possible completions is astronomically large. So instead of the true gradient, we estimate it using a handful of actual sampled rollouts. That's a \textbf{Monte Carlo} estimate: approximate an average using samples instead of the full computation.}
@@ -332,7 +340,7 @@ $\nabla_\theta J(\theta) \;\approx\; \dfrac{1}{N}\displaystyle\sum_{i=1}^{N} R(\
 
 % ================= 11 : BLOCK 3 -- ONE TOKEN =================
 \begin{frame}
-\eyebrow{Building Blocks \textperiodcentered\ 11}{\S7.2.2}
+\eyebrow{Building Blocks \textperiodcentered\ 12}{\S7.2.2}
 \frametag{inkdim}{Building block}
 \headline{Zooming into a single sampled token}
 {\normalsize\color{ink}Drop the sums over samples and time, and look at what happens to just one token. This is the piece both PPO and GRPO are built on:}
@@ -346,7 +354,7 @@ $\theta \;\leftarrow\; \theta + \alpha\,\underbrace{\nabla_\theta\log\pi_\theta(
 
 % ================= 12 : PROBLEM -- NOISY REWARD =================
 \begin{frame}
-\eyebrow{Baselines \& PPO \textperiodcentered\ 12}{\S7.2.3}
+\eyebrow{Baselines \& PPO \textperiodcentered\ 13}{\S7.2.3}
 \frametag{neg}{Problem}
 \headline{Reward alone can't tell you if an action was good}
 {\normalsize\color{ink}Two prompts: an easy one where most completions score 1, a hard one where most score 0. A completion scoring 1 on the easy prompt may be unremarkable; a completion scoring 0 on the hard prompt may be one of the better attempts made. Raw $R(\tau)$ can't express ``good, relative to what this prompt usually produces.''}
@@ -363,7 +371,7 @@ $A_k = R_k - \text{baseline}(s_k)$
 
 % ================= 13 : BLOCK 4 -- KL DIVERGENCE =================
 \begin{frame}
-\eyebrow{Building Blocks \textperiodcentered\ 13}{}
+\eyebrow{Building Blocks \textperiodcentered\ 14}{}
 \frametag{inkdim}{Building block}
 \headline{Keeping the model close to a reference}
 {\normalsize\color{ink}$\pi_\theta$ isn't a distribution --- it's a function from states to distributions. But fix one specific state $s_t$, and both $\pi_\theta(\cdot|s_t)$ and $\pi_{\text{ref}}(\cdot|s_t)$ become two ordinary, comparable distributions over the same vocabulary. \textbf{That} is what KL divergence compares.}
@@ -380,7 +388,7 @@ $\mathrm{KL}_t \;=\; \mathrm{KL}\big(\pi_\theta(\cdot\mid s_t)\,\Vert\,\pi_{\tex
 
 % ================= 14 : BRIDGE A -- WHY A REWRITE =================
 \begin{frame}
-\eyebrow{Baselines \& PPO \textperiodcentered\ 14}{\S7.3}
+\eyebrow{Baselines \& PPO \textperiodcentered\ 15}{\S7.3}
 \headline{Why PPO needs a rewrite, not just the raw gradient}
 {\normalsize\color{ink}Rollouts are expensive, so PPO takes \textit{several} gradient steps on the same batch before sampling again. But block 3's gradient is only valid at the exact $\theta$ that generated the data --- the moment $\theta$ moves, it stops being correct for this data. The fix is \textbf{importance sampling}: reweight old samples to estimate an expectation under the new policy.}
 \par\vspace{8pt}
@@ -396,7 +404,7 @@ $\mathbb{E}_{a\sim\pi_\theta}\big[A(s,a)\big] \;=\; \mathbb{E}_{a\sim\pi_{\text{
 
 % ================= 15 : BRIDGE B -- SAME GRADIENT =================
 \begin{frame}
-\eyebrow{Baselines \& PPO \textperiodcentered\ 15}{\S7.3}
+\eyebrow{Baselines \& PPO \textperiodcentered\ 16}{\S7.3}
 \headline{The ratio is block 3's gradient, in disguise}
 \small
 \renewcommand{\arraystretch}{1.4}
@@ -417,7 +425,7 @@ $= \dfrac{\pi_\theta(a_t|s_t)}{\pi_{\text{old}}(a_t|s_t)}\cdot\nabla_\theta\log\
 
 % ================= 16 : PROBLEM -- TRUST REGION NEEDED =================
 \begin{frame}
-\eyebrow{Baselines \& PPO \textperiodcentered\ 16}{\S7.3}
+\eyebrow{Baselines \& PPO \textperiodcentered\ 17}{\S7.3}
 \frametag{neg}{Problem}
 \headline{The rewrite only holds up close to $\theta_{\text{old}}$}
 {\normalsize\color{ink}The last slide showed $\nabla_\theta L(\theta)$ gives back the \textit{exact} right gradient --- but only exactly at $\theta=\theta_{\text{old}}$, where $\text{ratio}_t=1$. As the optimizer takes those several steps from bridge A, $\theta$ moves away, and $\text{ratio}_t(\theta)$ can drift far from 1 for some tokens. Nothing in $L(\theta)=\text{ratio}_t(\theta)\cdot A_t$ stops it from being pushed further and further in a direction that looks good on paper, using a policy comparison that's no longer trustworthy.}
@@ -430,7 +438,7 @@ $= \dfrac{\pi_\theta(a_t|s_t)}{\pi_{\text{old}}(a_t|s_t)}\cdot\nabla_\theta\log\
 
 % ================= 17 : BLOCK 5 -- WHAT THE CLIP DOES =================
 \begin{frame}
-\eyebrow{Baselines \& PPO \textperiodcentered\ 17}{\S7.3}
+\eyebrow{Baselines \& PPO \textperiodcentered\ 18}{\S7.3}
 \frametag{inkdim}{Building block}
 \headline{What the clip actually does}
 {\small\color{ink}Two versions of the same term get computed --- the true one, and one where the ratio is capped to the trust region. $\min$ always keeps whichever is \textit{smaller}:}
@@ -458,7 +466,7 @@ Drifted the wrong way & 0.7 & 0.7 & 0.8 & \color{neg}true --- uncapped \\
 
 % ================= 17 : IS THIS STILL CORRECT =================
 \begin{frame}
-\eyebrow{Baselines \& PPO \textperiodcentered\ 18}{}
+\eyebrow{Baselines \& PPO \textperiodcentered\ 19}{}
 \headline{Is this still mathematically correct?}
 {\small\color{ink}No --- and that's intentional. Once the ratio is capped, $\text{clip}(\cdot)$ is a \textit{constant} with respect to $\theta$, so its gradient is exactly zero there: $L^{\text{CLIP}}$ discards the true importance-sampling gradient rather than approximating it. It is not an unbiased estimator of $\nabla_\theta J(\theta)$.}
 \par\vspace{6pt}
@@ -478,7 +486,7 @@ Drifted the wrong way & 0.7 & 0.7 & 0.8 & \color{neg}true --- uncapped \\
 
 % ================= 17 : PPO VALUE MODEL INTUITION =================
 \begin{frame}
-\eyebrow{Baselines \& PPO \textperiodcentered\ 19}{\S7.3.2}
+\eyebrow{Baselines \& PPO \textperiodcentered\ 20}{\S7.3.2}
 \headline{PPO's baseline: ``better than expected,'' not ``good''}
 \begin{eqbox}
 $A_t = G_t - V_\phi(s_t)$
@@ -503,7 +511,7 @@ Sampled $G_t$ & $0.6$ --- a positive, reasonable-looking result on its own \\
 
 % ================= 18 : PPO -- ASSEMBLED =================
 \begin{frame}
-\eyebrow{Baselines \& PPO \textperiodcentered\ 20}{\S7.3.1}
+\eyebrow{Baselines \& PPO \textperiodcentered\ 21}{\S7.3.1}
 \frametag{accentB}{Approach}
 \headline{Proximal Policy Optimization (PPO) --- the complete update rule}
 \begin{eqbox}[fontupper=\normalsize,top=9pt,bottom=9pt]
@@ -516,7 +524,7 @@ $L_{\text{PPO}}(\theta) = \mathbb{E}_t\Big[\min\big(\text{ratio}_t(\theta)\,\til
 
 % ================= 17 : PROBLEM -- VALUE MODEL EXPENSIVE =================
 \begin{frame}
-\eyebrow{GRPO \textperiodcentered\ 21}{\S7.4}
+\eyebrow{GRPO \textperiodcentered\ 22}{\S7.4}
 \frametag{neg}{Problem}
 \headline{The value model is a whole second network}
 \lede{$V_\phi$ needs its own forward pass, its own regression loss, its own optimizer state. For a frontier-scale LLM, that isn't a footnote --- it's a large fraction of training cost.}
@@ -529,7 +537,7 @@ $L_{\text{PPO}}(\theta) = \mathbb{E}_t\Big[\min\big(\text{ratio}_t(\theta)\,\til
 
 % ================= 18 : APPROACH -- GRPO INTRO =================
 \begin{frame}
-\eyebrow{GRPO \textperiodcentered\ 22}{\S7.4}
+\eyebrow{GRPO \textperiodcentered\ 23}{\S7.4}
 \frametag{accentB}{Approach}
 \headline{Group Relative Policy Optimization (GRPO)}
 {\normalsize\color{ink}GRPO answers the same baseline question as PPO, but without training a value model. Instead: sample several completions for the \textit{same} prompt, and compare each one to the average of the group.}
@@ -542,7 +550,7 @@ $L_{\text{PPO}}(\theta) = \mathbb{E}_t\Big[\min\big(\text{ratio}_t(\theta)\,\til
 
 % ================= 19 : GRPO MECHANISM =================
 \begin{frame}
-\eyebrow{GRPO \textperiodcentered\ 23}{\S7.4.1}
+\eyebrow{GRPO \textperiodcentered\ 24}{\S7.4.1}
 \headline{Sample a group, compare within it}
 \begin{eqbox}[fontupper=\normalsize]
 $A_i = \dfrac{r_i - \text{mean}(r_1,\dots,r_G)}{\text{std}(r_1,\dots,r_G) + \varepsilon}$
@@ -565,7 +573,7 @@ $A_i = \dfrac{r_i - \text{mean}(r_1,\dots,r_G)}{\text{std}(r_1,\dots,r_G) + \var
 
 % ================= 20 : GRPO -- ASSEMBLED =================
 \begin{frame}
-\eyebrow{GRPO \textperiodcentered\ 24}{\S7.4.2 / \S7.4.3}
+\eyebrow{GRPO \textperiodcentered\ 25}{\S7.4.2 / \S7.4.3}
 \headline{GRPO --- the complete update rule}
 \begin{eqbox}[fontupper=\normalsize,top=9pt,bottom=9pt]
 $L_{\text{GRPO}}(\theta) = \mathbb{E}_i\Big[\min\big(\text{ratio}_i(\theta)A_i,\ \ \text{clip}(\text{ratio}_i(\theta),1{-}\varepsilon,1{+}\varepsilon)A_i\big)\Big] \,-\, \beta\cdot\mathrm{KL}(\pi_\theta\Vert\pi_{\text{ref}})$\\[8pt]
@@ -582,7 +590,7 @@ $L_{\text{GRPO}}(\theta) = \mathbb{E}_i\Big[\min\big(\text{ratio}_i(\theta)A_i,\
 
 % ================= 21 : APPROACH -- RLVR =================
 \begin{frame}
-\eyebrow{RLVR \textperiodcentered\ 25}{\S7.5}
+\eyebrow{RLVR \textperiodcentered\ 26}{\S7.5}
 \frametag{accentB}{Approach}
 \headline{Reinforcement Learning with Verifiable Rewards (RLVR)}
 \lede{Even under GRPO, a reward model still has to be trained on human-labeled preference data. For math, code, and other objectively checkable tasks, RLVR skips that: $R(x,y)$ comes from a deterministic verifier --- compare a final answer, run unit tests, check a formal equivalence.}
@@ -606,7 +614,7 @@ $L_{\text{GRPO}}(\theta) = \mathbb{E}_i\Big[\min\big(\text{ratio}_i(\theta)A_i,\
 
 % ================= 21b : ONE BASE, TWO PATHS =================
 \begin{frame}
-\eyebrow{DeepSeek-R1 \textperiodcentered\ 26}{\S7.6}
+\eyebrow{DeepSeek-R1 \textperiodcentered\ 27}{\S7.6}
 \headline{One base model, two independent paths}
 {\normalsize\color{ink}DeepSeek-V3-Base is the pretrained checkpoint before any reasoning-specific training --- it predicts text well, but hasn't yet been pushed toward long, self-corrective reasoning. Two separate recipes both start from this \textit{exact same} checkpoint, built independently of each other:}
 \par\vspace{12pt}
@@ -635,7 +643,7 @@ $L_{\text{GRPO}}(\theta) = \mathbb{E}_i\Big[\min\big(\text{ratio}_i(\theta)A_i,\
 
 % ================= 22 : RESULT -- R1-ZERO =================
 \begin{frame}
-\eyebrow{DeepSeek-R1 \textperiodcentered\ 27}{\S7.6}
+\eyebrow{DeepSeek-R1 \textperiodcentered\ 28}{\S7.6}
 \frametag{accent}{Result}
 \headline{GRPO + RLVR, applied directly to the base model}
 {\normalsize\color{ink}DeepSeek-R1-Zero starts from DeepSeek-V3-Base and applies GRPO with RLVR directly --- no supervised chain-of-thought examples first. Rewarded only for solving verifiable problems, the model begins allocating more tokens to hard problems, checking its own intermediate steps, and revising when something looks wrong --- often called an \textit{``aha moment.''}}
@@ -648,7 +656,7 @@ $L_{\text{GRPO}}(\theta) = \mathbb{E}_i\Big[\min\big(\text{ratio}_i(\theta)A_i,\
 
 % ================= 22b : PROBLEM -- WHY NOT READABLE =================
 \begin{frame}
-\eyebrow{DeepSeek-R1 \textperiodcentered\ 28}{\S7.6}
+\eyebrow{DeepSeek-R1 \textperiodcentered\ 29}{\S7.6}
 \frametag{neg}{Problem}
 \headline{Why ``correct'' isn't the same as ``readable''}
 {\small\color{ink}R1-Zero's reward checks exactly one thing: is the final answer correct (plus a loose check that reasoning sits inside the \texttt{<think>} tags). Nothing in that signal cares how the reasoning \textit{in between} reads.}
@@ -676,7 +684,7 @@ $L_{\text{GRPO}}(\theta) = \mathbb{E}_i\Big[\min\big(\text{ratio}_i(\theta)A_i,\
 
 % ================= 22c : BUILDING BLOCK -- WHAT IS SFT =================
 \begin{frame}
-\eyebrow{DeepSeek-R1 \textperiodcentered\ 29}{}
+\eyebrow{DeepSeek-R1 \textperiodcentered\ 30}{}
 \frametag{inkdim}{Building block}
 \headline{What is Supervised Fine-Tuning (SFT)?}
 {\small\color{ink}Everything else in this deck has been reinforcement learning: sample, score, reinforce. SFT is different --- it's \textit{imitation} learning. Collect a dataset of (prompt, correct response) pairs, written by humans or filtered from a model's own outputs, and train with ordinary next-token prediction to reproduce those exact responses.}
@@ -701,7 +709,7 @@ Exploration & none --- pure imitation & model must sample and discover \\
 
 % ================= 23 : APPROACH -- R1 DEDICATED =================
 \begin{frame}
-\eyebrow{DeepSeek-R1 \textperiodcentered\ 30}{\S7.7}
+\eyebrow{DeepSeek-R1 \textperiodcentered\ 31}{\S7.7}
 \frametag{accentB}{Approach}
 \headline{DeepSeek-R1: built fresh, informed by R1-Zero's outputs}
 {\normalsize\color{ink}R1 does \textit{not} continue R1-Zero's weights. It starts from the same DeepSeek-V3-Base, and runs its own staged pipeline: cold-start SFT $\rightarrow$ reasoning RL, now with a language-consistency reward $\rightarrow$ rejection sampling + mixed SFT with general data $\rightarrow$ a final hybrid-reward RL stage.}
@@ -714,7 +722,7 @@ Exploration & none --- pure imitation & model must sample and discover \\
 
 % ================= 23b : APPROACH -- WHICH STAGE FIXES WHAT =================
 \begin{frame}
-\eyebrow{DeepSeek-R1 \textperiodcentered\ 31}{\S7.7}
+\eyebrow{DeepSeek-R1 \textperiodcentered\ 32}{\S7.7}
 \headline{Which stage fixes which problem}
 \small
 \renewcommand{\arraystretch}{1.5}
@@ -734,7 +742,7 @@ Final hybrid RL & Rule-based rewards where verifiable, learned preference reward
 
 % ================= 23c : APPROACH -- R1-DISTILL DEDICATED =================
 \begin{frame}
-\eyebrow{DeepSeek-R1 \textperiodcentered\ 32}{\S7.7}
+\eyebrow{DeepSeek-R1 \textperiodcentered\ 33}{\S7.7}
 \frametag{accentB}{Approach}
 \headline{DeepSeek-R1-Distill: smaller models, no RL at all}
 {\normalsize\color{ink}R1-Distill isn't a DeepSeek architecture continued --- it's existing smaller models from \textit{other} labs (Qwen from Alibaba, Llama from Meta), taken as pretrained checkpoints and given ordinary supervised fine-tuning on a large set of reasoning traces generated by the finished R1 model. No RL, no verifier, no reward --- pure imitation of R1's outputs.}
@@ -747,7 +755,7 @@ Final hybrid RL & Rule-based rewards where verifiable, learned preference reward
 
 % ================= 23d : FAMILY TREE DIAGRAM =================
 \begin{frame}
-\eyebrow{DeepSeek-R1 \textperiodcentered\ 33}{\S7.7}
+\eyebrow{DeepSeek-R1 \textperiodcentered\ 34}{\S7.7}
 \headline{The whole family, in one picture}
 \begin{center}
 \scalebox{0.82}{
@@ -773,7 +781,7 @@ Final hybrid RL & Rule-based rewards where verifiable, learned preference reward
 
 % ================= 24 : IMPLEMENTATION =================
 \begin{frame}[fragile]
-\eyebrow{Implementation \textperiodcentered\ 34}{\S7.8\,--\,7.10}
+\eyebrow{Implementation \textperiodcentered\ 35}{\S7.8\,--\,7.10}
 \headline{One scalar loss, one backward pass}
 \begin{eqbox}
 $L(\theta) = -A\sum_{t=1}^{T}\log\pi_\theta(a_t|s_t)$
@@ -794,7 +802,7 @@ optimizer.step()
 
 % ================= 25 : SUMMARY =================
 \begin{frame}
-\eyebrow{Close \textperiodcentered\ 35}{\S7.15}
+\eyebrow{Close \textperiodcentered\ 36}{\S7.15}
 \headline{The whole lineage, one line each}
 \small
 \renewcommand{\arraystretch}{1.25}

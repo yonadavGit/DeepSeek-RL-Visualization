@@ -8,7 +8,10 @@ can pick up the thread without re-deriving all the context below.
 ## Files
 
 - `grpo-slides.tex` — the deck source. Single file, ~800 lines, self-contained.
-- `grpo-slides.pdf` — compiled output, 35 slides, 16:9.
+- `grpo-slides.pdf` — compiled output, 36 slides, 16:9.
+- `cover-meme.png` — cold-open slide 1 (a meme), pulled in via `\includegraphics`.
+  Slide 2 is the actual title slide; all `\eyebrow{}` numbers below assume the meme
+  occupies slide 1.
 - `deepseek-rl.pdf` — the source chapter (Manning book excerpt). **Not committed** —
   it's someone else's copyrighted book PDF; only reference it locally.
 
@@ -48,10 +51,10 @@ Gotchas below).
   used for asides, caveats, "why this matters"), `card`/`cardA`/`cardB` (bordered
   info tiles, used in columns).
 - **Diagrams**: two hand-built TikZ pieces reused across slides — `\trajdiagram`
-  (state-chain with terminal reward, used on slides 1 and 7) and a branching-tree
-  diagram (slide 8, LLM generation as a tree, wavy `decorations.pathmorphing` edges
+  (state-chain with terminal reward, used on slides 2 and 8) and a branching-tree
+  diagram (slide 9, LLM generation as a tree, wavy `decorations.pathmorphing` edges
   meaning "many single-token states compressed into one arrow"). Plus one-off TikZ
-  diagrams: the classical MDP graph (slide 4), and the R1-family tree (slide 33).
+  diagrams: the classical MDP graph (slide 5), and the R1-family tree (slide 34).
 
 ## Pedagogical structure — the thing to preserve
 
@@ -72,46 +75,47 @@ which earlier slide each symbol came from. Do not reintroduce the earlier
 multi-color "swatch-coded formula" approach for these — it was tried and explicitly
 rejected as too busy (see below).
 
-## Full slide outline (35 slides)
+## Full slide outline (36 slides)
 
-1. Title
-2. The chain — the whole Problem→Approach→Result arc in one table (mirrors the
+1. Cover — meme (cold open, not part of the numbered content arc)
+2. Title
+3. The chain — the whole Problem→Approach→Result arc in one table (mirrors the
    overall structure below; update this if the chain changes)
-3. Classical MDP — definitions (background, not in book)
-4. Classical MDP — as a graph (TikZ; cleaning-robot example, V(s) on nodes)
-5. Classical MDP — value functions, the Bellman-backup mental model (background)
-6. LLM as MDP — same tuple, new content (§7.1)
-7. **Problem** — reward only shows up at the end (§7.1.3)
-8. LLM generation as a tree (TikZ; contrasts with slide 4's graph — no cycles,
+4. Classical MDP — definitions (background, not in book)
+5. Classical MDP — as a graph (TikZ; cleaning-robot example, V(s) on nodes)
+6. Classical MDP — value functions, the Bellman-backup mental model (background)
+7. LLM as MDP — same tuple, new content (§7.1)
+8. **Problem** — reward only shows up at the end (§7.1.3)
+9. LLM generation as a tree (TikZ; contrasts with slide 5's graph — no cycles,
    reward only at leaves; same 4 completions reused later in the GRPO example)
-9. **Building block** — what is J(θ) (§7.2)
-10. **Building block** — Monte Carlo estimate of ∇J(θ) (§7.2)
-11. **Building block** — one sampled token, the compact update rule (§7.2.2)
-12. **Problem** — raw reward is noisy → the advantage (§7.2.3)
-13. **Building block** — KL divergence, what it means / how it's computed
-14. Bridge — why PPO needs a rewrite (importance sampling, "not in the book")
-15. Bridge — the ratio is block 3's gradient, in disguise (derivation)
-16. **Problem** — the rewrite only holds up close to θ_old (defines "trust region")
-17. **Building block** — what the clip actually does (min/clip, worked example)
-18. Is this still mathematically correct? (honesty check: biased, pessimistic bound,
+10. **Building block** — what is J(θ) (§7.2)
+11. **Building block** — Monte Carlo estimate of ∇J(θ) (§7.2)
+12. **Building block** — one sampled token, the compact update rule (§7.2.2)
+13. **Problem** — raw reward is noisy → the advantage (§7.2.3)
+14. **Building block** — KL divergence, what it means / how it's computed
+15. Bridge — why PPO needs a rewrite (importance sampling, "not in the book")
+16. Bridge — the ratio is block 3's gradient, in disguise (derivation)
+17. **Problem** — the rewrite only holds up close to θ_old (defines "trust region")
+18. **Building block** — what the clip actually does (min/clip, worked example)
+19. Is this still mathematically correct? (honesty check: biased, pessimistic bound,
     TRPO connection — "not in the book")
-19. PPO's baseline — "better than expected," not "good" (§7.3.2)
-20. **Approach** — PPO, the complete update rule (§7.3.1)
-21. **Problem** — the value model is a second network (§7.4)
-22. **Approach** — GRPO intro (§7.4)
-23. GRPO mechanism — group-relative advantage + Roger worked example (§7.4.1)
-24. **Approach** — GRPO, the complete update rule (§7.4.2/7.4.3)
-25. **Approach** — RLVR (§7.5)
-26. One base model, two independent paths (DeepSeek-V3-Base, §7.6)
-27. **Result** — R1-Zero, GRPO+RLVR applied directly (§7.6)
-28. **Problem** — why "correct" isn't the same as "readable" (§7.6)
-29. **Building block** — what is SFT (Supervised Fine-Tuning), contrasted with RL
-30. **Approach** — DeepSeek-R1, built fresh, informed by R1-Zero's outputs (§7.7)
-31. Which stage fixes which problem (table, ties back to slide 28's two problems)
-32. **Approach** — DeepSeek-R1-Distill, smaller models, no RL at all (§7.7)
-33. The whole R1 family, in one picture (TikZ family tree)
-34. Implementation — one scalar loss, one backward pass (§7.8–7.10)
-35. Summary — the whole lineage, one line each (§7.15)
+20. PPO's baseline — "better than expected," not "good" (§7.3.2)
+21. **Approach** — PPO, the complete update rule (§7.3.1)
+22. **Problem** — the value model is a second network (§7.4)
+23. **Approach** — GRPO intro (§7.4)
+24. GRPO mechanism — group-relative advantage + Roger worked example (§7.4.1)
+25. **Approach** — GRPO, the complete update rule (§7.4.2/7.4.3)
+26. **Approach** — RLVR (§7.5)
+27. One base model, two independent paths (DeepSeek-V3-Base, §7.6)
+28. **Result** — R1-Zero, GRPO+RLVR applied directly (§7.6)
+29. **Problem** — why "correct" isn't the same as "readable" (§7.6)
+30. **Building block** — what is SFT (Supervised Fine-Tuning), contrasted with RL
+31. **Approach** — DeepSeek-R1, built fresh, informed by R1-Zero's outputs (§7.7)
+32. Which stage fixes which problem (table, ties back to slide 29's two problems)
+33. **Approach** — DeepSeek-R1-Distill, smaller models, no RL at all (§7.7)
+34. The whole R1 family, in one picture (TikZ family tree)
+35. Implementation — one scalar loss, one backward pass (§7.8–7.10)
+36. Summary — the whole lineage, one line each (§7.15)
 
 ## Why things are the way they are (chronological, condensed)
 
@@ -174,8 +178,15 @@ rejected as too busy (see below).
     flow. This produced slides 26–33 (common starting point, dedicated R1 slide with
     an explicit "not the same weights" callout, dedicated R1-Distill slide, and the
     closing family-tree diagram with solid arrows = real training vs. dashed arrow =
-    data-only influence). Also added the SFT building-block slide (29) since "SFT"
-    had been used as an unexplained acronym for several slides before this point.
+    data-only influence). Also added the SFT building-block slide (§7.7 area) since
+    "SFT" had been used as an unexplained acronym for several slides before this
+    point.
+11. Added a meme (`cover-meme.png`) as slide 1, purely as a cold open — every other
+    slide shifted by one. If inserting/removing slides in the future, remember every
+    `\eyebrow{...}` call hardcodes its own slide number (no auto-numbering macro
+    exists for this); a full renumber is a one-line regex over
+    `\eyebrow{...\textperiodcentered\ NN}` (see git history for the exact command
+    used each time this happened).
 
 ## Gotchas (hard-won, don't redo the debugging)
 
@@ -217,9 +228,9 @@ rejected as too busy (see below).
 
 - Nothing is currently mid-edit; the deck compiles clean (only long-standing
   sub-4pt overfull warnings remain, all visually harmless).
-- If asked to extend further: the RLVR section (slide 25) and Implementation
-  section (slide 34) haven't been through the same "building blocks first" scrutiny
+- If asked to extend further: the RLVR section (slide 26) and Implementation
+  section (slide 35) haven't been through the same "building blocks first" scrutiny
   as the PPO/GRPO section — worth checking if similar forward-reference issues
   exist there if the user asks for more depth in that area.
 - No presentation dry-run / timing check has been done — deck has not been
-  validated for live-talk pacing (35 slides).
+  validated for live-talk pacing (36 slides).
