@@ -427,12 +427,12 @@ $= \dfrac{\pi_\theta(a_t|s_t)}{\pi_{\text{old}}(a_t|s_t)}\cdot\nabla_\theta\log\
 \begin{frame}
 \eyebrow{Baselines \& PPO \textperiodcentered\ 17}{\S7.3}
 \frametag{neg}{Problem}
-\headline{The rewrite only holds up close to $\theta_{\text{old}}$}
-{\normalsize\color{ink}PPO reuses one batch of rollouts for several update steps instead of resampling every time --- that's the whole point of the rewrite. But the exact-gradient guarantee from the last slide only holds right at $\theta=\theta_{\text{old}}$, where $\text{ratio}_t=1$. After a few of those update steps, $\theta$ has moved, and $\text{ratio}_t(\theta)$ can drift far from 1 for some tokens. Nothing in $L(\theta)=\text{ratio}_t(\theta)\cdot A_t$ stops that drift --- the objective just keeps rewarding it, even once the comparison it's built on, current policy versus old policy, is no longer a small, trustworthy difference.}
+\headline{Exact in principle, unreliable in practice}
+{\normalsize\color{ink}The identity behind the rewrite --- $\mathbb{E}_{\pi_\theta}[A] = \mathbb{E}_{\pi_{\text{old}}}[\text{ratio}_t(\theta)\cdot A]$ --- is exact for \textit{any} $\theta$; it never breaks. What breaks is narrower: you're estimating that expectation from one small, \textit{fixed} batch sampled once at $\theta_{\text{old}}$. As $\theta$ drifts, $\text{ratio}_t(\theta)$ can grow huge or collapse toward zero for individual tokens, and a handful of wildly reweighted old samples can end up dominating the whole batch average --- even though the identity they're plugged into is still true. The \textit{estimate} turns unreliable long before the math turns wrong.}
 \par\vspace{10pt}
 \begin{calloutwarm}
 \clabel{accent}{Naming this: the trust region}
-{\small\color{ink}The zone around $\theta_{\text{old}}$ where $\text{ratio}_t(\theta)$ stays close to 1 --- where the rewrite is still a reasonable stand-in for the real gradient --- is called the \textbf{trust region}. PPO needs some way to stop an update from pushing $\text{ratio}_t(\theta)$ far outside it. That's what clipping is for.}
+{\small\color{ink}The zone around $\theta_{\text{old}}$ where $\text{ratio}_t(\theta)$ stays close to 1 --- where a small fixed batch is still a \textit{reliable} estimate, not just a technically-unbiased one --- is called the \textbf{trust region}. PPO needs some way to stop an update from pushing $\text{ratio}_t(\theta)$ far outside it. That's what clipping is for.}
 \end{calloutwarm}
 \end{frame}
 
