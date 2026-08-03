@@ -428,7 +428,7 @@ $= \dfrac{\pi_\theta(a_t|s_t)}{\pi_{\text{old}}(a_t|s_t)}\cdot\nabla_\theta\log\
 \eyebrow{Baselines \& PPO \textperiodcentered\ 17}{\S7.3}
 \frametag{neg}{Problem}
 \headline{The rewrite only holds up close to $\theta_{\text{old}}$}
-{\normalsize\color{ink}The last slide showed $\nabla_\theta L(\theta)$ gives back the \textit{exact} right gradient --- but only exactly at $\theta=\theta_{\text{old}}$, where $\text{ratio}_t=1$. As the optimizer takes those several steps from bridge A, $\theta$ moves away, and $\text{ratio}_t(\theta)$ can drift far from 1 for some tokens. Nothing in $L(\theta)=\text{ratio}_t(\theta)\cdot A_t$ stops it from being pushed further and further in a direction that looks good on paper, using a policy comparison that's no longer trustworthy.}
+{\normalsize\color{ink}PPO reuses one batch of rollouts for several update steps instead of resampling every time --- that's the whole point of the rewrite. But the exact-gradient guarantee from the last slide only holds right at $\theta=\theta_{\text{old}}$, where $\text{ratio}_t=1$. After a few of those update steps, $\theta$ has moved, and $\text{ratio}_t(\theta)$ can drift far from 1 for some tokens. Nothing in $L(\theta)=\text{ratio}_t(\theta)\cdot A_t$ stops that drift --- the objective just keeps rewarding it, even once the comparison it's built on, current policy versus old policy, is no longer a small, trustworthy difference.}
 \par\vspace{10pt}
 \begin{calloutwarm}
 \clabel{accent}{Naming this: the trust region}
