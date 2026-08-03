@@ -307,7 +307,7 @@ $r_1 = r_2 = \cdots = r_{T-1} = 0, \quad r_T = R(\tau)$
 % ================= 09 : BLOCK 1 -- J(THETA) =================
 \begin{frame}
 \eyebrow{Building Blocks \textperiodcentered\ 10}{\S7.2}
-\frametag{inkdim}{Building block}
+\frametag{inkdim}{Building block 1}
 \headline{What are we even trying to maximize?}
 \begin{eqbox}[fontupper=\normalsize]
 $J(\theta) = \mathbb{E}_{x\sim D}\,\mathbb{E}_{y\sim\pi_\theta(\cdot|x)}\big[R(x,y)\big]$
@@ -324,7 +324,7 @@ $J(\theta) = \mathbb{E}_{x\sim D}\,\mathbb{E}_{y\sim\pi_\theta(\cdot|x)}\big[R(x
 % ================= 10 : BLOCK 2 -- MONTE CARLO =================
 \begin{frame}
 \eyebrow{Building Blocks \textperiodcentered\ 11}{\S7.2}
-\frametag{inkdim}{Building block}
+\frametag{inkdim}{Building block 2}
 \headline{Estimating its gradient from sampled rollouts}
 {\normalsize\color{ink}We can't compute $J(\theta)$ exactly --- the space of possible completions is astronomically large. So instead of the true gradient, we estimate it using a handful of actual sampled rollouts. That's a \textbf{Monte Carlo} estimate: approximate an average using samples instead of the full computation.}
 \par\vspace{10pt}
@@ -341,7 +341,7 @@ $\nabla_\theta J(\theta) \;\approx\; \dfrac{1}{N}\displaystyle\sum_{i=1}^{N} R(\
 % ================= 11 : BLOCK 3 -- ONE TOKEN =================
 \begin{frame}
 \eyebrow{Building Blocks \textperiodcentered\ 12}{\S7.2.2}
-\frametag{inkdim}{Building block}
+\frametag{inkdim}{Building block 3}
 \headline{Zooming into a single sampled token}
 {\normalsize\color{ink}Drop the sums over samples and time, and look at what happens to just one token. This is the piece both PPO and GRPO are built on:}
 \par\vspace{8pt}
@@ -372,7 +372,7 @@ $A_k = R_k - \text{baseline}(s_k)$
 % ================= 13 : BLOCK 4 -- KL DIVERGENCE =================
 \begin{frame}
 \eyebrow{Building Blocks \textperiodcentered\ 14}{}
-\frametag{inkdim}{Building block}
+\frametag{inkdim}{Building block 4}
 \headline{Keeping the model close to a reference}
 {\normalsize\color{ink}$\pi_\theta$ isn't a distribution --- it's a function from states to distributions. But fix one specific state $s_t$, and both $\pi_\theta(\cdot|s_t)$ and $\pi_{\text{ref}}(\cdot|s_t)$ become two ordinary, comparable distributions over the same vocabulary. \textbf{That} is what KL divergence compares.}
 \par\vspace{8pt}
@@ -439,7 +439,7 @@ $= \dfrac{\pi_\theta(a_t|s_t)}{\pi_{\text{old}}(a_t|s_t)}\cdot\nabla_\theta\log\
 % ================= 17 : BLOCK 5 -- WHAT THE CLIP DOES =================
 \begin{frame}
 \eyebrow{Baselines \& PPO \textperiodcentered\ 18}{\S7.3}
-\frametag{inkdim}{Building block}
+\frametag{inkdim}{Building block 5}
 \headline{What the clip actually does}
 {\small\color{ink}Two versions of the same term get computed --- the true one, and one where the ratio is capped to the trust region. $\min$ always keeps whichever is \textit{smaller}:}
 \par\vspace{3pt}
