@@ -369,35 +369,9 @@ $A_k = R_k - \text{baseline}(s_k)$
 \end{callout}
 \end{frame}
 
-% ================= 12b : BASELINE VARIANCE REDUCTION =================
-\begin{frame}
-\eyebrow{Baselines \& PPO \textperiodcentered\ 14}{\S7.2.3}
-\headline{The baseline's real job: shrinking noise, not fixing bias}
-{\footnotesize\color{ink}Two prompts of very different difficulty --- ``What is $12\times 3$?'' (easy) and ``Prove $\sqrt{2}$ is irrational'' (hard). $\text{baseline}(s)$ here is each prompt's \textit{true} typical score --- unknown in practice; PPO and GRPO will later estimate it two different ways.}
-\par\vspace{3pt}
-\footnotesize
-\begin{tabular}{@{} l l l l @{}}
-\toprule
-\textbf{Prompt} & \textbf{Reward $R$} & \textbf{true baseline$(s)$} & \textbf{$A=R-\text{baseline}(s)$} \\
-\midrule
-Easy ($12\times3$) & 1 & 0.8 & $+0.2$ \\
-Easy ($12\times3$) & 1 & 0.8 & $+0.2$ \\
-Hard ($\sqrt2$ irrational) & 0 & 0.2 & $-0.2$ \\
-Hard ($\sqrt2$ irrational) & 0 & 0.2 & $-0.2$ \\
-\bottomrule
-\end{tabular}
-\par\vspace{3pt}
-{\footnotesize\color{ink}Raw reward across the batch: mean $0.5$, variance $0.25$ --- almost entirely explained by \textit{which prompt} a completion came from, not how good it was. Baseline-adjusted advantage: mean $0$, variance $0.04$ --- $6.25\times$ smaller, since subtracting each prompt's typical score cancels the difficulty gap.}
-\par\vspace{3pt}
-\begin{callout}[top=4pt,bottom=4pt]
-\clabel{accentB}{Same target, less noise}
-{\footnotesize\color{ink}Raw $R$ and baseline-adjusted $A$ push the gradient the same direction on average --- subtracting a state-only function never biases it. But a batch dominated by prompt-difficulty swings teaches the model far less per rollout than one where that swing is already gone. That's the case for bothering with $\text{baseline}(s)$.}
-\end{callout}
-\end{frame}
-
 % ================= 13 : BLOCK 4 -- KL DIVERGENCE =================
 \begin{frame}
-\eyebrow{Building Blocks \textperiodcentered\ 15}{}
+\eyebrow{Building Blocks \textperiodcentered\ 14}{}
 \frametag{inkdim}{Building block 4}
 \headline{Keeping the model close to a reference}
 {\normalsize\color{ink}$\pi_\theta$ isn't a distribution --- it's a function from states to distributions. But fix one specific state $s_t$, and both $\pi_\theta(\cdot|s_t)$ and $\pi_{\text{ref}}(\cdot|s_t)$ become two ordinary, comparable distributions over the same vocabulary. \textbf{That} is what KL divergence compares.}
@@ -414,7 +388,7 @@ $\mathrm{KL}_t \;=\; \mathrm{KL}\big(\pi_\theta(\cdot\mid s_t)\,\Vert\,\pi_{\tex
 
 % ================= 14 : BRIDGE A -- WHY A REWRITE =================
 \begin{frame}
-\eyebrow{Baselines \& PPO \textperiodcentered\ 16}{\S7.3}
+\eyebrow{Baselines \& PPO \textperiodcentered\ 15}{\S7.3}
 \headline{Why PPO needs a rewrite, not just the raw gradient}
 {\normalsize\color{ink}Rollouts are expensive, so PPO takes \textit{several} gradient steps on the same batch before sampling again. But block 3's gradient is only valid at the exact $\theta$ that generated the data --- the moment $\theta$ moves, it stops being correct for this data. The fix is \textbf{importance sampling}: reweight old samples to estimate an expectation under the new policy.}
 \par\vspace{8pt}
@@ -430,7 +404,7 @@ $\mathbb{E}_{a\sim\pi_\theta}\big[A(s,a)\big] \;=\; \mathbb{E}_{a\sim\pi_{\text{
 
 % ================= 15 : BRIDGE B -- SAME GRADIENT =================
 \begin{frame}
-\eyebrow{Baselines \& PPO \textperiodcentered\ 17}{\S7.3}
+\eyebrow{Baselines \& PPO \textperiodcentered\ 16}{\S7.3}
 \headline{The ratio is block 3's gradient, in disguise}
 \small
 \renewcommand{\arraystretch}{1.4}
@@ -451,7 +425,7 @@ $= \dfrac{\pi_\theta(a_t|s_t)}{\pi_{\text{old}}(a_t|s_t)}\cdot\nabla_\theta\log\
 
 % ================= 16 : PROBLEM -- TRUST REGION NEEDED =================
 \begin{frame}
-\eyebrow{Baselines \& PPO \textperiodcentered\ 18}{\S7.3}
+\eyebrow{Baselines \& PPO \textperiodcentered\ 17}{\S7.3}
 \frametag{neg}{Problem}
 \headline{Exact in principle, unreliable in practice}
 {\normalsize\color{ink}The identity behind the rewrite --- $\mathbb{E}_{\pi_\theta}[A] = \mathbb{E}_{\pi_{\text{old}}}[\text{ratio}_t(\theta)\cdot A]$ --- is exact for \textit{any} $\theta$; it never breaks. What breaks is narrower: you're estimating that expectation from one small, \textit{fixed} batch sampled once at $\theta_{\text{old}}$. As $\theta$ drifts, $\text{ratio}_t(\theta)$ can grow huge or collapse toward zero for individual tokens, and a handful of wildly reweighted old samples can end up dominating the whole batch average --- even though the identity they're plugged into is still true. The \textit{estimate} turns unreliable long before the math turns wrong.}
@@ -464,7 +438,7 @@ $= \dfrac{\pi_\theta(a_t|s_t)}{\pi_{\text{old}}(a_t|s_t)}\cdot\nabla_\theta\log\
 
 % ================= 17 : BLOCK 5 -- WHAT THE CLIP DOES =================
 \begin{frame}
-\eyebrow{Baselines \& PPO \textperiodcentered\ 19}{\S7.3}
+\eyebrow{Baselines \& PPO \textperiodcentered\ 18}{\S7.3}
 \frametag{inkdim}{Building block 5}
 \vspace{-6pt}
 \headline{What the clip actually does}
@@ -496,7 +470,7 @@ Bad, wrong direction & $-1$ & 1.5 & $-1.5$ & $-1.2$ & \color{neg}true --- uncapp
 
 % ================= 17 : IS THIS STILL CORRECT =================
 \begin{frame}
-\eyebrow{Baselines \& PPO \textperiodcentered\ 20}{}
+\eyebrow{Baselines \& PPO \textperiodcentered\ 19}{}
 \headline{Is this still mathematically correct?}
 {\small\color{ink}No --- and that's intentional. Once the ratio is capped, $\text{clip}(\cdot)$ is a \textit{constant} with respect to $\theta$, so its gradient is exactly zero there: $L^{\text{CLIP}}$ discards the true importance-sampling gradient rather than approximating it. It is not an unbiased estimator of $\nabla_\theta J(\theta)$.}
 \par\vspace{6pt}
@@ -516,7 +490,7 @@ Bad, wrong direction & $-1$ & 1.5 & $-1.5$ & $-1.2$ & \color{neg}true --- uncapp
 
 % ================= 17 : PPO VALUE MODEL INTUITION =================
 \begin{frame}
-\eyebrow{Baselines \& PPO \textperiodcentered\ 21}{\S7.3.2}
+\eyebrow{Baselines \& PPO \textperiodcentered\ 20}{\S7.3.2}
 \headline{PPO's baseline: ``better than expected,'' not ``good''}
 \begin{eqbox}
 $A_t = R(\tau) - V_\phi(s_t)$
@@ -541,7 +515,7 @@ Sampled $R(\tau)$ & $0.6$ --- a positive, reasonable-looking result on its own \
 
 % ================= 18 : PPO -- ASSEMBLED =================
 \begin{frame}
-\eyebrow{Baselines \& PPO \textperiodcentered\ 22}{\S7.3.1}
+\eyebrow{Baselines \& PPO \textperiodcentered\ 21}{\S7.3.1}
 \frametag{accentB}{Approach}
 \headline{Proximal Policy Optimization (PPO) --- the complete update rule}
 \begin{eqbox}[fontupper=\normalsize,top=9pt,bottom=9pt]
@@ -554,7 +528,7 @@ $L_{\text{PPO}}(\theta) = \mathbb{E}_{\substack{i\,\sim\,\text{batch}\\ t\,\sim\
 
 % ================= 17 : PROBLEM -- VALUE MODEL EXPENSIVE =================
 \begin{frame}
-\eyebrow{GRPO \textperiodcentered\ 23}{\S7.4}
+\eyebrow{GRPO \textperiodcentered\ 22}{\S7.4}
 \frametag{neg}{Problem}
 \headline{The value model is a whole second network}
 \lede{$V_\phi$ needs its own forward pass, its own regression loss, its own optimizer state. For a frontier-scale LLM, that isn't a footnote --- it's a large fraction of training cost.}
@@ -567,7 +541,7 @@ $L_{\text{PPO}}(\theta) = \mathbb{E}_{\substack{i\,\sim\,\text{batch}\\ t\,\sim\
 
 % ================= 18 : APPROACH -- GRPO INTRO =================
 \begin{frame}
-\eyebrow{GRPO \textperiodcentered\ 24}{\S7.4}
+\eyebrow{GRPO \textperiodcentered\ 23}{\S7.4}
 \frametag{accentB}{Approach}
 \headline{Group Relative Policy Optimization (GRPO)}
 {\normalsize\color{ink}GRPO answers the same baseline question as PPO, but without training a value model. Instead: sample several completions for the \textit{same} prompt, and compare each one to the average of the group.}
@@ -580,7 +554,7 @@ $L_{\text{PPO}}(\theta) = \mathbb{E}_{\substack{i\,\sim\,\text{batch}\\ t\,\sim\
 
 % ================= 19 : GRPO MECHANISM =================
 \begin{frame}
-\eyebrow{GRPO \textperiodcentered\ 25}{\S7.4.1}
+\eyebrow{GRPO \textperiodcentered\ 24}{\S7.4.1}
 \headline{Sample a group, compare within it}
 \begin{eqbox}[fontupper=\normalsize]
 $A_i = \dfrac{r_i - \text{mean}(r_1,\dots,r_G)}{\text{std}(r_1,\dots,r_G) + \varepsilon}$
@@ -605,7 +579,7 @@ $A_i = \dfrac{r_i - \text{mean}(r_1,\dots,r_G)}{\text{std}(r_1,\dots,r_G) + \var
 
 % ================= 20 : GRPO -- ASSEMBLED =================
 \begin{frame}
-\eyebrow{GRPO \textperiodcentered\ 26}{\S7.4.2 / \S7.4.3}
+\eyebrow{GRPO \textperiodcentered\ 25}{\S7.4.2 / \S7.4.3}
 \headline{GRPO --- the complete update rule}
 \begin{eqbox}[fontupper=\normalsize,top=9pt,bottom=9pt]
 $L_{\text{GRPO}}(\theta) = \mathbb{E}_{i\,\sim\,\text{group}}\Big[\min\big(\text{ratio}_i(\theta)A_i,\ \ \text{clip}(\text{ratio}_i(\theta),1{-}\varepsilon,1{+}\varepsilon)A_i\big)\Big] \,-\, \beta\cdot\mathrm{KL}(\pi_\theta\Vert\pi_{\text{ref}})$\\[8pt]
@@ -622,7 +596,7 @@ $L_{\text{GRPO}}(\theta) = \mathbb{E}_{i\,\sim\,\text{group}}\Big[\min\big(\text
 
 % ================= 21 : APPROACH -- RLVR =================
 \begin{frame}
-\eyebrow{RLVR \textperiodcentered\ 27}{\S7.5}
+\eyebrow{RLVR \textperiodcentered\ 26}{\S7.5}
 \frametag{accentB}{Approach}
 \headline{Reinforcement Learning with Verifiable Rewards (RLVR)}
 \lede{Even under GRPO, a reward model still has to be trained on human-labeled preference data. For math, code, and other objectively checkable tasks, RLVR skips that: $R(x,y)$ comes from a deterministic verifier --- compare a final answer, run unit tests, check a formal equivalence.}
@@ -646,7 +620,7 @@ $L_{\text{GRPO}}(\theta) = \mathbb{E}_{i\,\sim\,\text{group}}\Big[\min\big(\text
 
 % ================= 21b : ONE BASE, TWO PATHS =================
 \begin{frame}
-\eyebrow{DeepSeek-R1 \textperiodcentered\ 28}{\S7.6}
+\eyebrow{DeepSeek-R1 \textperiodcentered\ 27}{\S7.6}
 \headline{One base model, two independent paths}
 {\normalsize\color{ink}DeepSeek-V3-Base is the pretrained checkpoint before any reasoning-specific training --- it predicts text well, but hasn't yet been pushed toward long, self-corrective reasoning. Two separate recipes both start from this \textit{exact same} checkpoint, built independently of each other:}
 \par\vspace{12pt}
@@ -675,7 +649,7 @@ $L_{\text{GRPO}}(\theta) = \mathbb{E}_{i\,\sim\,\text{group}}\Big[\min\big(\text
 
 % ================= 22 : RESULT -- R1-ZERO =================
 \begin{frame}
-\eyebrow{DeepSeek-R1 \textperiodcentered\ 29}{\S7.6}
+\eyebrow{DeepSeek-R1 \textperiodcentered\ 28}{\S7.6}
 \frametag{accent}{Result}
 \headline{GRPO + RLVR, applied directly to the base model}
 {\normalsize\color{ink}DeepSeek-R1-Zero starts from DeepSeek-V3-Base and applies GRPO with RLVR directly --- no supervised chain-of-thought examples first. Rewarded only for solving verifiable problems, the model begins allocating more tokens to hard problems, checking its own intermediate steps, and revising when something looks wrong --- often called an \textit{``aha moment.''}}
@@ -688,7 +662,7 @@ $L_{\text{GRPO}}(\theta) = \mathbb{E}_{i\,\sim\,\text{group}}\Big[\min\big(\text
 
 % ================= 22b : PROBLEM -- WHY NOT READABLE =================
 \begin{frame}
-\eyebrow{DeepSeek-R1 \textperiodcentered\ 30}{\S7.6}
+\eyebrow{DeepSeek-R1 \textperiodcentered\ 29}{\S7.6}
 \frametag{neg}{Problem}
 \headline{Why ``correct'' isn't the same as ``readable''}
 {\small\color{ink}R1-Zero's reward checks exactly one thing: is the final answer correct (plus a loose check that reasoning sits inside the \texttt{<think>} tags). Nothing in that signal cares how the reasoning \textit{in between} reads.}
@@ -716,7 +690,7 @@ $L_{\text{GRPO}}(\theta) = \mathbb{E}_{i\,\sim\,\text{group}}\Big[\min\big(\text
 
 % ================= 22c : BUILDING BLOCK -- WHAT IS SFT =================
 \begin{frame}
-\eyebrow{DeepSeek-R1 \textperiodcentered\ 31}{}
+\eyebrow{DeepSeek-R1 \textperiodcentered\ 30}{}
 \frametag{inkdim}{Building block}
 \headline{What is Supervised Fine-Tuning (SFT)?}
 {\small\color{ink}Everything else in this deck has been reinforcement learning: sample, score, reinforce. SFT is different --- it's \textit{imitation} learning. Collect a dataset of (prompt, correct response) pairs, written by humans or filtered from a model's own outputs, and train with ordinary next-token prediction to reproduce those exact responses.}
@@ -741,7 +715,7 @@ Exploration & none --- pure imitation & model must sample and discover \\
 
 % ================= 23 : APPROACH -- R1 DEDICATED =================
 \begin{frame}
-\eyebrow{DeepSeek-R1 \textperiodcentered\ 32}{\S7.7}
+\eyebrow{DeepSeek-R1 \textperiodcentered\ 31}{\S7.7}
 \frametag{accentB}{Approach}
 \headline{DeepSeek-R1: built fresh, informed by R1-Zero's outputs}
 {\normalsize\color{ink}R1 does \textit{not} continue R1-Zero's weights. It starts from the same DeepSeek-V3-Base, and runs its own staged pipeline: cold-start SFT $\rightarrow$ reasoning RL, now with a language-consistency reward $\rightarrow$ rejection sampling + mixed SFT with general data $\rightarrow$ a final hybrid-reward RL stage.}
@@ -754,7 +728,7 @@ Exploration & none --- pure imitation & model must sample and discover \\
 
 % ================= 23b : APPROACH -- WHICH STAGE FIXES WHAT =================
 \begin{frame}
-\eyebrow{DeepSeek-R1 \textperiodcentered\ 33}{\S7.7}
+\eyebrow{DeepSeek-R1 \textperiodcentered\ 32}{\S7.7}
 \headline{Which stage fixes which problem}
 \small
 \renewcommand{\arraystretch}{1.5}
@@ -774,7 +748,7 @@ Final hybrid RL & Rule-based rewards where verifiable, learned preference reward
 
 % ================= 23c : APPROACH -- R1-DISTILL DEDICATED =================
 \begin{frame}
-\eyebrow{DeepSeek-R1 \textperiodcentered\ 34}{\S7.7}
+\eyebrow{DeepSeek-R1 \textperiodcentered\ 33}{\S7.7}
 \frametag{accentB}{Approach}
 \headline{DeepSeek-R1-Distill: smaller models, no RL at all}
 {\normalsize\color{ink}R1-Distill isn't a DeepSeek architecture continued --- it's existing smaller models from \textit{other} labs (Qwen from Alibaba, Llama from Meta), taken as pretrained checkpoints and given ordinary supervised fine-tuning on a large set of reasoning traces generated by the finished R1 model. No RL, no verifier, no reward --- pure imitation of R1's outputs.}
@@ -787,7 +761,7 @@ Final hybrid RL & Rule-based rewards where verifiable, learned preference reward
 
 % ================= 23d : FAMILY TREE DIAGRAM =================
 \begin{frame}
-\eyebrow{DeepSeek-R1 \textperiodcentered\ 35}{\S7.7}
+\eyebrow{DeepSeek-R1 \textperiodcentered\ 34}{\S7.7}
 \headline{The whole family, in one picture}
 \begin{center}
 \scalebox{0.82}{
@@ -813,7 +787,7 @@ Final hybrid RL & Rule-based rewards where verifiable, learned preference reward
 
 % ================= 24 : IMPLEMENTATION =================
 \begin{frame}[fragile]
-\eyebrow{Implementation \textperiodcentered\ 36}{\S7.8\,--\,7.10}
+\eyebrow{Implementation \textperiodcentered\ 35}{\S7.8\,--\,7.10}
 \headline{One scalar loss, one backward pass}
 \begin{eqbox}
 $L(\theta) = -A\sum_{t=1}^{T}\log\pi_\theta(a_t|s_t)$
@@ -834,7 +808,7 @@ optimizer.step()
 
 % ================= 25 : SUMMARY =================
 \begin{frame}
-\eyebrow{Close \textperiodcentered\ 37}{\S7.15}
+\eyebrow{Close \textperiodcentered\ 36}{\S7.15}
 \headline{The whole lineage, one line each}
 \small
 \renewcommand{\arraystretch}{1.25}
