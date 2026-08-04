@@ -518,10 +518,9 @@ Sampled $G_t$ & $0.6$ --- a positive, reasonable-looking result on its own \\
 \eyebrow{Baselines \& PPO \textperiodcentered\ 21}{\S7.3.1}
 \frametag{accentB}{Approach}
 \headline{Proximal Policy Optimization (PPO) --- the complete update rule}
-\begin{eqbox}[fontupper=\normalsize,top=7pt,bottom=7pt]
-$L_{\text{PPO}}(\theta) = \mathbb{E}_t\Big[\min\big(\text{ratio}_t(\theta)\,\tilde A_t,\ \ \text{clip}(\text{ratio}_t(\theta),1{-}\varepsilon,1{+}\varepsilon)\,\tilde A_t\big)\Big]$\\[5pt]
-{\footnotesize $=\ \dfrac{1}{\sum_i T_i}\displaystyle\sum_{i=1}^{N}\sum_{t=1}^{T_i}\min\big(\text{ratio}_{i,t}(\theta)\,\tilde A_{i,t},\ \ \text{clip}(\text{ratio}_{i,t}(\theta),1{-}\varepsilon,1{+}\varepsilon)\,\tilde A_{i,t}\big)$}\\[5pt]
-{\footnotesize where $\ \tilde A_t = \tilde G_t - V_\phi(s_t), \qquad \tilde r_t = r_t - \beta\,\mathrm{KL}_t(\pi_\theta\Vert\pi_{\text{ref}})$}
+\begin{eqbox}[fontupper=\normalsize,top=9pt,bottom=9pt]
+$L_{\text{PPO}}(\theta) = \mathbb{E}_{\substack{i\,\sim\,\text{batch}\\ t\,\sim\,\text{completion }i}}\Big[\min\big(\text{ratio}_{i,t}(\theta)\,\tilde A_{i,t},\ \ \text{clip}(\text{ratio}_{i,t}(\theta),1{-}\varepsilon,1{+}\varepsilon)\,\tilde A_{i,t}\big)\Big]$\\[8pt]
+{\small where $\ \tilde A_t = \tilde G_t - V_\phi(s_t), \qquad \tilde r_t = r_t - \beta\,\mathrm{KL}_t(\pi_\theta\Vert\pi_{\text{ref}})$}
 \end{eqbox}
 \par\vspace{10pt}
 {\small\color{ink}Every piece is already familiar: $\text{ratio}_t$ and $\text{clip}$ are block 5; $V_\phi(s_t)$ is the value-model baseline from the last slide; the KL penalty is block 4, folded into the reward before $\tilde A_t$ is ever formed.}
@@ -580,14 +579,13 @@ $A_i = \dfrac{r_i - \text{mean}(r_1,\dots,r_G)}{\text{std}(r_1,\dots,r_G) + \var
 \begin{frame}
 \eyebrow{GRPO \textperiodcentered\ 25}{\S7.4.2 / \S7.4.3}
 \headline{GRPO --- the complete update rule}
-\begin{eqbox}[fontupper=\normalsize,top=7pt,bottom=7pt]
-$L_{\text{GRPO}}(\theta) = \mathbb{E}_i\Big[\min\big(\text{ratio}_i(\theta)A_i,\ \ \text{clip}(\text{ratio}_i(\theta),1{-}\varepsilon,1{+}\varepsilon)A_i\big)\Big] \,-\, \beta\cdot\mathrm{KL}(\pi_\theta\Vert\pi_{\text{ref}})$\\[5pt]
-{\footnotesize $=\ \dfrac{1}{G}\displaystyle\sum_{i=1}^{G}\min\big(\text{ratio}_i(\theta)A_i,\ \ \text{clip}(\text{ratio}_i(\theta),1{-}\varepsilon,1{+}\varepsilon)A_i\big) \,-\, \beta\cdot\mathrm{KL}(\pi_\theta\Vert\pi_{\text{ref}})$}\\[5pt]
-{\footnotesize where $\ A_i = \dfrac{r_i-\text{mean}(r_1,\dots,r_G)}{\text{std}(r_1,\dots,r_G)+\varepsilon}$}
+\begin{eqbox}[fontupper=\normalsize,top=9pt,bottom=9pt]
+$L_{\text{GRPO}}(\theta) = \mathbb{E}_{i\,\sim\,\text{group}}\Big[\min\big(\text{ratio}_i(\theta)A_i,\ \ \text{clip}(\text{ratio}_i(\theta),1{-}\varepsilon,1{+}\varepsilon)A_i\big)\Big] \,-\, \beta\cdot\mathrm{KL}(\pi_\theta\Vert\pi_{\text{ref}})$\\[8pt]
+{\small where $\ A_i = \dfrac{r_i-\text{mean}(r_1,\dots,r_G)}{\text{std}(r_1,\dots,r_G)+\varepsilon}$}
 \end{eqbox}
-\par\vspace{5pt}
+\par\vspace{9pt}
 {\small\color{ink}$\text{ratio}_i$ and $\text{clip}$ are the \textit{exact same} block 5, unchanged. $A_i$ is the group-relative advantage from the last slide, replacing PPO's value model. KL is added as its own term here, instead of folded into the reward.}
-\par\vspace{5pt}
+\par\vspace{9pt}
 \begin{callout}
 \clabel{accentB}{The trade-off}
 {\small\color{ink}GRPO isn't cheaper because it samples fewer completions --- it samples \textit{more}. At matched sample count, it's cheaper because there's no critic path, and KL as its own term keeps its effect explicit and easier to tune.}
