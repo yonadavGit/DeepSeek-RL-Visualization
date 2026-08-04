@@ -559,22 +559,22 @@ $L_{\text{PPO}}(\theta) = \mathbb{E}_{\substack{i\,\sim\,\text{batch}\\ t\,\sim\
 \begin{eqbox}[fontupper=\normalsize]
 $A_i = \dfrac{r_i - \text{mean}(r_1,\dots,r_G)}{\text{std}(r_1,\dots,r_G) + \varepsilon}$
 \end{eqbox}
-\vspace{8pt}
+\vspace{5pt}
 {\small\color{inkdim}Prompt: ``What is $27-16$?'' --- ground truth is $11$; the verifier checks each completion's final answer against it.}
-\vspace{6pt}
-\normalsize
-\begin{tabular}{@{} l l l @{}}
+\vspace{4pt}
+\small
+\begin{tabular}{@{} l l l l @{}}
 \toprule
-\textbf{Completion} & \textbf{Final answer} & \textbf{Reward} \\
+\textbf{Completion} & \textbf{Final answer} & \textbf{Reward} & \textbf{$A_i$} \\
 \midrule
-\color{accentB}A & 11 & 1 \\
-\color{neg}B & 10 & 0 \\
-\color{accentB}C & 11 & 1 \\
-\color{neg}D & 16 & 0 \\
+\color{accentB}A & 11 & 1 & $+1$ \\
+\color{neg}B & 10 & 0 & $-1$ \\
+\color{accentB}C & 11 & 1 & $+1$ \\
+\color{neg}D & 16 & 0 & $-1$ \\
 \bottomrule
 \end{tabular}
-\par\vspace{10pt}
-{\normalsize\color{ink}Group mean $=0.5$. The verifier only ever said 0 or 1 --- it's the comparison against the group that turns that into a signal with both sign and magnitude: A, C reinforced; B, D suppressed.}
+\par\vspace{6pt}
+{\small\color{ink}Group mean $=0.5$, std $=0.5$, so $A_i=\pm1$ --- a clean result of the even 2/2 split. The verifier only ever said 0 or 1; comparing against the group turns that into a signal with both sign and magnitude: A, C reinforced; B, D suppressed.}
 \end{frame}
 
 % ================= 20 : GRPO -- ASSEMBLED =================
