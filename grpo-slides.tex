@@ -493,7 +493,7 @@ Bad, wrong direction & $-1$ & 1.5 & $-1.5$ & $-1.2$ & \color{neg}true --- uncapp
 \eyebrow{Baselines \& PPO \textperiodcentered\ 20}{\S7.3.2}
 \headline{PPO's baseline: ``better than expected,'' not ``good''}
 \begin{eqbox}
-$A_t = G_t - V_\phi(s_t)$
+$A_t = R(\tau) - V_\phi(s_t)$
 \end{eqbox}
 \vspace{10pt}
 \normalsize
@@ -502,7 +502,7 @@ $A_t = G_t - V_\phi(s_t)$
 \textbf{Quantity} & \textbf{Value} \\
 \midrule
 $V_\phi(s_t)$ & $0.9$ --- this prefix usually leads to strong outcomes \\
-Sampled $G_t$ & $0.6$ --- a positive, reasonable-looking result on its own \\
+Sampled $R(\tau)$ & $0.6$ --- a positive, reasonable-looking result on its own \\
 \color{neg}$A_t$ & $0.6-0.9=-0.3 \Rightarrow$ this token gets \textit{suppressed} \\
 \bottomrule
 \end{tabular}
@@ -520,7 +520,7 @@ Sampled $G_t$ & $0.6$ --- a positive, reasonable-looking result on its own \\
 \headline{Proximal Policy Optimization (PPO) --- the complete update rule}
 \begin{eqbox}[fontupper=\normalsize,top=9pt,bottom=9pt]
 $L_{\text{PPO}}(\theta) = \mathbb{E}_{\substack{i\,\sim\,\text{batch}\\ t\,\sim\,\text{completion }i}}\Big[\min\big(\text{ratio}_{i,t}(\theta)\,\tilde A_{i,t},\ \ \text{clip}(\text{ratio}_{i,t}(\theta),1{-}\varepsilon,1{+}\varepsilon)\,\tilde A_{i,t}\big)\Big]$\\[8pt]
-{\small where $\ \tilde A_t = \tilde G_t - V_\phi(s_t), \qquad \tilde r_t = r_t - \beta\,\mathrm{KL}_t(\pi_\theta\Vert\pi_{\text{ref}})$}
+{\small where $\ \tilde A_t = \Big(\displaystyle\sum_{k=t}^{T}\tilde r_k\Big) - V_\phi(s_t), \qquad \tilde r_t = r_t - \beta\,\mathrm{KL}_t(\pi_\theta\Vert\pi_{\text{ref}})$}
 \end{eqbox}
 \par\vspace{10pt}
 {\small\color{ink}Every piece is already familiar: $\text{ratio}_t$ and $\text{clip}$ are block 5; $V_\phi(s_t)$ is the value-model baseline from the last slide; the KL penalty is block 4, folded into the reward before $\tilde A_t$ is ever formed.}
