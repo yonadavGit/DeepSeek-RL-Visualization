@@ -375,13 +375,15 @@ $A_k = R_k - \text{baseline}(s_k)$
 \headline{Subtracting a baseline never biases the gradient}
 {\normalsize\color{ink}$\text{baseline}(s)$ can be \textit{any} function of the state, with one rule: it can't depend on the sampled action $a$. That rule alone is enough to guarantee the swap changes nothing about where training is headed.}
 \par\vspace{10pt}
-\begin{eqbox}[fontupper=\normalsize]
-$\mathbb{E}_{a\sim\pi_\theta}\big[\nabla_\theta\log\pi_\theta(a|s)\big] \;=\; \sum_a \pi_\theta(a|s)\nabla_\theta\log\pi_\theta(a|s) \;=\; \nabla_\theta\sum_a\pi_\theta(a|s) \;=\; \nabla_\theta 1 \;=\; 0$
+\begin{eqbox}[fontupper=\normalsize,top=8pt,bottom=8pt]
+$\mathbb{E}_a\big[\nabla_\theta\log\pi_\theta(a|s)\cdot\text{baseline}(s)\big] \;=\; \text{baseline}(s)\cdot\mathbb{E}_a\big[\nabla_\theta\log\pi_\theta(a|s)\big]$\\[6pt]
+{\footnotesize $\mathbb{E}_a\big[\nabla_\theta\log\pi_\theta(a|s)\big] = \sum_a \pi_\theta(a|s)\nabla_\theta\log\pi_\theta(a|s) = \nabla_\theta\sum_a\pi_\theta(a|s) = \nabla_\theta 1 = 0$}\\[6pt]
+$\Longrightarrow\ \mathbb{E}_a\big[\nabla_\theta\log\pi_\theta(a|s)\cdot\text{baseline}(s)\big] \;=\; \text{baseline}(s)\cdot 0 \;=\; 0$
 \end{eqbox}
-\par\vspace{10pt}
-\begin{callout}
+\par\vspace{8pt}
+\begin{callout}[top=6pt,bottom=6pt]
 \clabel{accentB}{Why this settles it}
-{\small\color{ink}Same log-derivative identity ($\pi_\theta\nabla_\theta\log\pi_\theta=\nabla_\theta\pi_\theta$) buried inside block 2's Monte Carlo estimate. Because $\text{baseline}(s)$ doesn't depend on $a$, it factors straight out of the expectation --- and what's left is exactly zero: $\mathbb{E}_a\big[\nabla_\theta\log\pi_\theta(a|s)\cdot\text{baseline}(s)\big] = \text{baseline}(s)\cdot 0 = 0$, for \textit{any} choice of $\text{baseline}(s)$. PPO's $V_\phi(s)$ and GRPO's group mean are just two different picks.}
+{\small\color{ink}$\text{baseline}(s)$ is constant with respect to $a$, so it pulls straight out of the expectation --- and what's left over is exactly the log-derivative identity ($\pi_\theta\nabla_\theta\log\pi_\theta=\nabla_\theta\pi_\theta$) hiding inside block 2's Monte Carlo estimate. Same conclusion for \textit{any} choice of $\text{baseline}(s)$: PPO's $V_\phi(s)$ and GRPO's group mean are just two different picks.}
 \end{callout}
 \end{frame}
 
