@@ -373,12 +373,12 @@ $A_k = R_k - \text{baseline}(s_k)$
 \begin{frame}
 \eyebrow{Baselines \& PPO \textperiodcentered\ 14}{\S7.2.3}
 \headline{The baseline's real job: shrinking noise, not fixing bias}
-{\footnotesize\color{ink}Two prompts of very different difficulty --- ``What is $12\times 3$?'' (easy) and ``Prove $\sqrt{2}$ is irrational'' (hard). Pool a batch of rollouts from both:}
+{\footnotesize\color{ink}Two prompts of very different difficulty --- ``What is $12\times 3$?'' (easy) and ``Prove $\sqrt{2}$ is irrational'' (hard). $\text{baseline}(s)$ here is each prompt's \textit{true} typical score --- unknown in practice; PPO and GRPO will later estimate it two different ways.}
 \par\vspace{3pt}
 \footnotesize
 \begin{tabular}{@{} l l l l @{}}
 \toprule
-\textbf{Prompt} & \textbf{Reward $R$} & \textbf{baseline$(s)$} & \textbf{$A=R-\text{baseline}(s)$} \\
+\textbf{Prompt} & \textbf{Reward $R$} & \textbf{true baseline$(s)$} & \textbf{$A=R-\text{baseline}(s)$} \\
 \midrule
 Easy ($12\times3$) & 1 & 0.8 & $+0.2$ \\
 Easy ($12\times3$) & 1 & 0.8 & $+0.2$ \\
